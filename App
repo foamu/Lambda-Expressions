@@ -1,0 +1,183 @@
+interface SystemControl {
+	int activation(int a, int b);
+}
+
+interface EngineSystemControl {
+	int activation(String a);
+}
+
+class launchBase {
+
+	public int launchPrep(SystemControl e) {
+		return e.activation(13, 17);
+	}
+
+	public void launchPrep(EngineSystemControl e) {
+		int value = e.activation("Hello");
+		System.out.println("Return value is: " + value);
+	}
+}
+
+public class App {
+
+	public static void main(String[] args) {
+
+		launchBase lb1 = new launchBase();
+
+		/*
+		 * Pre Java-8 way lb1.launchPrep(new systemControl() {
+		 * 
+		 * @Override public int Activation() { 
+		 * System.out.println("Testing");
+		 * return 7; } });
+		 * 
+		 * // Java 8+ "Lambda Expression"
+		 * lb1.LaunchPrep(() -> System.out.println("Hey, this is a lambda expression speaking."));
+		 * 
+		 * // Using lambda expressions to execute multiple lines of code
+		 * 
+		 * lb1.launchPrep(() -> {
+		 * System.out.println("For each loop is now executing."); 
+		 * for (int i = 0; i <= 10; i++) { 
+		 * System.out.println("Executing: " + i); 
+		 * }
+		 * 
+		 * System.out.println("For each loop has now finished executing."); });
+		 * 
+		 * // Return values with old style
+		 * 
+		 * lb1.launchPrep(new systemControl() {
+		 * 
+		 * @Override public int Activation() {
+		 * System.out.println("Old style return values executing. . ."); return
+		 * 5;}
+		 * });
+		 * 
+		 * //////////////////////////////////////////////// // 
+		 * Return values with Java 8+ Lambda Expression
+		 * ////////////////////////////////////////////////
+		 * 
+		 * lb1.launchPrep(() -> { System.out.
+		 * println("Return values with Lambda Expression executing. . .");
+		 * return 5; });
+		 */
+
+		//////////////////////////////////////////////
+		/*
+		 * Parameters: the old way
+		 * 
+		 * lb1.launchPrep(new systemControl() { 
+		 * public int Activation(int a) {
+		 * System.out.println("Hello there.");
+		 * System.out.println("And hello again."); 
+		 * return 7 + a; } 
+		 * });
+		 * 
+		 * // Parameters via Lambda Expression
+		 * 
+		 * lb1.launchPrep( a -> {
+		 * System.out.println("Lambda with parameters now running.");
+		 * System.out.println("Lambda with parameters, part 2.");
+		 * return 7 + a; 
+		 * });
+		 */
+		//////////////////////////////////////////////
+		/*
+		 * Multiple parameters: the old way
+		 * 
+		 * lb1.launchPrep(new systemControl() {
+		 * 
+		 * @Override 
+		 * public int activation(int a, int b) {
+		 * System.out.println("Old way of multiple parameters now running.");
+		 * return a + b;
+		 * }
+		 * });
+		 * 
+		 * // Multiple parameters: Lambda Expression. Note: When dealing with
+		 * multiple parameters, round brackets must be used as seen below.
+		 * 
+		 * lb1.launchPrep( (a,b) -> { 
+		 * System.out.println("Lambda Expression now handling multiple parameters. . .");
+		 * return a + b;
+		 * 
+		 * });
+		////////////////////////////////////////////////
+		// Resolving Parameter Ambiguity: Anonymous class method
+
+		lb1.launchPrep(new SystemControl() {
+			@Override
+			public int activation(int a) {
+				System.out.println("Some stuff");
+				return a + 7;
+			}
+		});
+		
+		lb1.launchPrep((int a) -> {
+			System.out.println("Lambda expression stuff boom");
+			return a + 7;
+		});
+		*/
+		
+		// Can use c in our anonymous class methods and lambda expressions
+        // as long as we don't change its value after assigning.
+        // We say it's "effectively final"
+		
+		// int c = 50;
+		
+		// Anonymous class method.
+		/*
+		lb1.launchPrep(new SystemControl() {
+			@Override
+			public int activation(int a, int b) {
+				System.out.println("Running anonymous class now.");
+				return a + b + c;
+			}
+		});
+		
+		// Lambda expression method.
+		
+		lb1.launchPrep((int a, int b) -> {
+			System.out.println("Lambda expression now doing its thing. . .");
+			return a + b + c;
+			
+		});
+		*/
+		
+		/*
+		 * Locally declared variables: anonymous class vs lambda expression
+		
+		int c = 50;
+		
+		lb1.launchPrep(new SystemControl() {
+			@Override
+			public int activation(int a, int b) {
+				int c = 44; // This is a completely new c. 
+				return a + b + c;
+			}
+		});
+		
+		lb1.launchPrep((int a, int b) -> {
+			int c = 25; // Syntax error: c is already declared above.
+			return a + b + c;
+		});
+		*/
+		
+		//We can store the lambda expression in a variable of the interface type if we want.
+		
+		SystemControl sc = (a, b) -> {
+			System.out.println("Oi!");
+			return a+b;
+		};
+		
+		lb1.launchPrep(sc);
+		
+		//If you want to assign it to an object or you want to assign it to some superclass of the interface, then you need a cast in there.
+		Object codeblock = (SystemControl)(a,b) -> {
+			System.out.println("Cast");
+		    return a + b;
+		};
+		
+		lb1.launchPrep((SystemControl) codeblock);
+	}
+}
